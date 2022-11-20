@@ -1,33 +1,18 @@
 import pygame
 
 from constants import WIDTH, HEIGHT, GREY, WHITE, SQUARE_SIZE, WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK,WHITE_QUEEN, WHITE_KING, BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP,BLACK_ROOK, BLACK_QUEEN, BLACK_KING
-
-FPS = 60
-#variables:
-selected = None
-board = []
+import Pieces
 
 
-window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("ChessLife")
-clock = pygame.time.Clock()
-def main():
+def calculate_pos(row, col):
+    x = SQUARE_SIZE * col + SQUARE_SIZE // 2
+    y = SQUARE_SIZE * row + SQUARE_SIZE // 2
+    return x, y
 
-    run = True
-
-    while run:
-        clock.tick(FPS)
-        drawBoard(window)
-        drawInitialPosition(window)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos
-                row, col = get_row_col_from_mouse(pos)
-        pygame.display.flip()
-    pygame.quit()
-
+def drawPiece(window, piece, row, col):
+    x, y = calculate_pos(row, col)
+    window.blit(piece, (x - piece.get_width() / 2 - 1, y - piece.get_height() / 2))
+    
 
 def drawBoard(window):
     window.fill(WHITE)
@@ -39,11 +24,10 @@ def drawBoard(window):
                 pygame.draw.rect(window, WHITE, (row * SQUARE_SIZE, col * SQUARE_SIZE, row*SQUARE_SIZE + SQUARE_SIZE, col*SQUARE_SIZE + SQUARE_SIZE))
 
 def drawInitialPosition(window):
-    white_pawn = pygame.transform.scale(pygame.image.load("assets/WhitePawn.png"), (80, 95))
     row1, row2 = 6, 1
     for col in range(8):
-        window.blit(WHITE_PAWN, (col * SQUARE_SIZE - 1, row1 * SQUARE_SIZE - 10))
-        window.blit(BLACK_PAWN, (col * SQUARE_SIZE - 1, row2 * SQUARE_SIZE - 10))
+        drawPiece(window, WHITE_PAWN, row1, col)
+        drawPiece(window, BLACK_PAWN, row2, col)
     
     row1, row2 = 0, 7
     for col in range(0, 8, 7):
@@ -83,4 +67,3 @@ def select(row, col):
 def createboard():
     pass
     
-main()
