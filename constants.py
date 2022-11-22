@@ -5,12 +5,14 @@ HEIGHT = 640
 ROWS = 8
 COLS = 8
 SQUARE_SIZE = WIDTH // ROWS
+FPS = 60
 
 
 #colors
 GREY = (128, 128, 128)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
 
 #pieces
 WHITE_PAWN = pygame.transform.scale(pygame.image.load("assets/WhitePawn.png"), (80, 85))

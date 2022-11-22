@@ -2,15 +2,12 @@
 from constants import SQUARE_SIZE
 
 class Piece():
-    def __init__(self, row, col, color):
-        self.row = row
-        self.col = col
-        self.color = color
-        self.promote = None
+    def __init__(self):
 
         #center of the square
         self.x = 0
         self.y = 0
+        self.calculate_pos()
         
     def calculate_pos(self):
         self.x = SQUARE_SIZE * self.col + SQUARE_SIZE // 2
@@ -19,23 +16,7 @@ class Piece():
     def move(self, row, col):
         self.row = row
         self.col = col
-
-
-class Bishop(Piece):
-    pass
-
-
-
-class Pawn(Piece):
-    pass
-class Knight(Piece):
-    pass
-class Queen(Piece):
-    pass
-
-class King(Piece):
-    pass
-
-class Rook(Piece):
-    pass
+    
+    def get_valid_moves(self):
+        pass
 

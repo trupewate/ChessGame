@@ -1,10 +1,16 @@
 
-from Pieces import Bishop, Knight, Pawn, Rook, Queen, King
+from Pieces.pawn import Pawn
+from Pieces.knight import Knight
+from Pieces.bishop import Bishop
+from Pieces.rook import Rook
+from Pieces.queen import Queen
+from Pieces.king import King
 from constants import ROWS, COLS, BLACK, WHITE
 class Board():
     def __init__(self):
         self.board = []
         self.createBoard()
+        
 
     def createBoard(self):
         for i in range(ROWS):
@@ -51,7 +57,3 @@ class Board():
         self.board[row1][col] = King(row1, col, BLACK)
         self.board[row2][col] = King(row2, col, WHITE)
         
-
-board = Board()
-board.initialPosition()
-print(board.board)
