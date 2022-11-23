@@ -55,6 +55,7 @@ def draw_board():
 def draw_pieces():
     for i in range(ROWS):
         for j in range(COLS):
+                        
             piece = game.board.board[i][j]
             if piece != 0:
                 type = piece.get_type()

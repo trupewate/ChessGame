@@ -20,8 +20,8 @@ class Queen(Piece):
         
         row1 = row + 1
         while row1 < 8:
-            if board[row1][col] != 0:
-                if board[row1][col].color != self.color:
+            if board.board[row1][col] != 0:
+                if board.board[row1][col].color != self.color:
                     valid_moves.append((row1, col))
                     break
                 else:
@@ -32,8 +32,8 @@ class Queen(Piece):
 
         row1 = row - 1
         while row1 >= 0:
-            if board[row1][col] != 0:
-                if board[row1][col].color != self.color:
+            if board.board[row1][col] != 0:
+                if board.board[row1][col].color != self.color:
                     valid_moves.append((row1, col))
                     break
                 else:
@@ -44,8 +44,8 @@ class Queen(Piece):
 
         col1 = col + 1
         while col1 < 8:
-            if board[row][col1] != 0:
-                if board[row][col1].color != self.color:
+            if board.board[row][col1] != 0:
+                if board.board[row][col1].color != self.color:
                     valid_moves.append((row, col1))
                     break
                 else:
@@ -56,8 +56,8 @@ class Queen(Piece):
 
         col1 = col - 1
         while col1 >= 0:
-            if board[row][col1] != 0:
-                if board[row][col1].color != self.color:
+            if board.board[row][col1] != 0:
+                if board.board[row][col1].color != self.color:
                     valid_moves.append((row, col1))
                     break
                 else:
@@ -69,8 +69,8 @@ class Queen(Piece):
         row1 = row - 1
         col1 = col - 1
         while row1 >= 0 and col1 >= 0:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:
@@ -83,8 +83,8 @@ class Queen(Piece):
         row1 = row + 1
         col1 = col - 1
         while row1 < 8 and col1 >= 0:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:
@@ -97,8 +97,8 @@ class Queen(Piece):
         row1 = row + 1
         col1 = col + 1
         while row1 < 8 and col1 < 8:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:
@@ -111,8 +111,8 @@ class Queen(Piece):
         row1 = row - 1
         col1 = col + 1
         while row1 >= 0 and col1 < 8:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:

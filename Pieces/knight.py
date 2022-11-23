@@ -21,9 +21,9 @@ class Knight(Piece):
         coordinates = [(row + 2, col + 1), (row + 2, col -1), (row - 2, col + 1), (row - 2, col - 1), (row + 1, col + 2),(row + 1, col - 2), (row - 1, col + 2), (row - 1, col - 2)]
         for x, y in coordinates:
             if 0 <= x < 8 and 0 <= y < 8:
-                if board[x][y] == 0:
+                if board.board[x][y] == 0:
                     valid_moves.append((x, y))
-                elif board[x][y].color != self.color:
+                elif board.board[x][y].color != self.color:
                     valid_moves.append((x, y))
 
         return valid_moves

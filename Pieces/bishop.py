@@ -21,8 +21,8 @@ class Bishop(Piece):
         row1 = row - 1
         col1 = col - 1
         while row1 >= 0 and col1 >= 0:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:
@@ -35,8 +35,8 @@ class Bishop(Piece):
         row1 = row + 1
         col1 = col - 1
         while row1 < 8 and col1 >= 0:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:
@@ -49,8 +49,8 @@ class Bishop(Piece):
         row1 = row + 1
         col1 = col + 1
         while row1 < 8 and col1 < 8:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:
@@ -63,8 +63,8 @@ class Bishop(Piece):
         row1 = row - 1
         col1 = col + 1
         while row1 >= 0 and col1 < 8:
-            if board[row1][col1] != 0:
-                if board[row1][col1].color != self.color:
+            if board.board[row1][col1] != 0:
+                if board.board[row1][col1].color != self.color:
                     valid_moves.append((row1, col1))
                     break
                 else:

@@ -20,11 +20,11 @@ class Pawn(Piece):
         row, col = self.row, self.col
         if self.color == WHITE:
             if row - 1 >= 0 and col - 1 >= 0:
-                left_piece = board[row - 1][col - 1]
+                left_piece = board.board[row - 1][col - 1]
             else:
                 left_piece = 0
             if col + 1 < 8 and row - 1 >= 0:
-                right_piece = board[row - 1][col + 1]
+                right_piece = board.board[row - 1][col + 1]
             else:
                 right_piece = 0
             #promotion
@@ -35,11 +35,11 @@ class Pawn(Piece):
             #if row == 3 and previous.move == row 2 - row 4 nearby
 
             if row == 6:
-                if board[row- 1][col] == 0:
+                if board.board[row- 1][col] == 0:
                     valid_moves.append((row - 1, col))
-                if board[row - 2][col] == 0:
+                if board.board[row - 2][col] == 0:
                     valid_moves.append((row - 2, col))
-            elif board[row - 1][col] == 0:
+            elif board.board[row - 1][col] == 0:
                 valid_moves.append((row - 1, col))
             if left_piece != 0:
                 if left_piece.color != self.color:
@@ -50,13 +50,13 @@ class Pawn(Piece):
 
         else:
             if row + 1 < 8 and col + 1 < 8:
-                left_piece = board[row + 1][col + 1]
-            else:
-                left_piece = 0
-            if col -1 >= 0 and row + 1 < 8:
-                right_piece = board[row + 1][col - 1]
+                right_piece = board.board[row + 1][col + 1]
             else:
                 right_piece = 0
+            if col - 1 >= 0 and row + 1 < 8:
+                left_piece = board.board[row + 1][col - 1]
+            else:
+                left_piece = 0
             #promotion
             if row == 8:
                 #user choice
@@ -65,11 +65,11 @@ class Pawn(Piece):
             #if row == 3 and previous.move == row 2 - row 4 nearby
 
             if row == 1:
-                if board[row + 1][col] == 0:
+                if board.board[row + 1][col] == 0:
                     valid_moves.append((row + 1, col))
-                if board[row + 2][col] == 0:
+                if board.board[row + 2][col] == 0:
                     valid_moves.append((row + 2, col))
-            elif board[row + 1][col] == 0:
+            elif board.board[row + 1][col] == 0:
                 valid_moves.append((row + 1, col))
             if left_piece != 0:
                 if left_piece.color != self.color:

@@ -1,4 +1,5 @@
 from piece import Piece
+from Pieces import pawn
 from constants import WHITE_KING, BLACK_KING, WHITE
 
 class King(Piece):
@@ -14,6 +15,52 @@ class King(Piece):
     def get_position(self):
         return self.row, self.col
     
+
+    def is_check(self, game):
+        if self.color == WHITE:
+            print()
+            if (self.row, self.col) in game.all_black_valid_moves:
+                return True
+        else:
+            if (self.row, self.col) in game.all_white_valid_moves:
+                return True
+        return False
+
     def get_valid_moves(self, board):
         row, col = self.row, self.col
+        potential_moves = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
+        potential_moves_copy = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
+        #checking for nearby own pieces:
+
+        for i in range(len(potential_moves_copy)):
+            row1, col1 = potential_moves_copy[i]
+            if (0 <= row1 < 8) and (0 <= col1 < 8):
+                if board.board[row1][col1] != 0:
+                    if board.board[row1][col1].color == self.color:
+                        potential_moves.remove((row1, col1))
+            else:
+                potential_moves.remove((row1, col1))
+
+        blocked_squares = []
+        valid_moves = []
+        if self.color == WHITE:
+            pieces = board.black_pieces
+        else:
+            pieces = board.white_pieces
+        for piece in pieces:
+            if type(piece) == pawn.Pawn:
+                r, c = piece.row, piece.col
+                if piece.color == WHITE:
+                    blocked_squares.extend(((r - 1, c - 1), (r - 1, c + 1)))
+                else:
+                    blocked_squares.extend(((r + 1, c + 1), (r + 1, c - 1)))
+            elif type(piece) != King:
+                blocked_squares.extend(piece.get_valid_moves(board))
+            else:
+                row, col = piece.row, piece.col
+        blocked_squares.extend(((row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )))
+        for i in range(len(potential_moves)):
+            if potential_moves[i] not in blocked_squares:
+                valid_moves.append(potential_moves[i])
         
+        return valid_moves
