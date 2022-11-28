@@ -7,9 +7,15 @@ class Rook(Piece):
         self.row = row
         self.col = col
         self.type = WHITE_ROOK if self.color == WHITE else BLACK_ROOK
+        self.moved = False
 
     def get_type(self):
         return self.type
+
+    def move(self, row, col):
+        self.row = row
+        self.col = col
+        self.moved = True
 
     def get_position(self):
         return self.row, self.col

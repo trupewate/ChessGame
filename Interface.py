@@ -57,7 +57,7 @@ def draw_pieces():
         for j in range(COLS):
                         
             piece = game.board.board[i][j]
-            if piece != 0:
+            if piece != 0 and piece != 1:
                 type = piece.get_type()
                 x, y = calculate_pos(i, j)
                 window.blit(piece.get_type(), (x - type.get_width() / 2 - 1, y - type.get_height() / 2))

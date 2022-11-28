@@ -1,5 +1,5 @@
 from piece import Piece
-from Pieces import pawn
+from Pieces import pawn, rook
 from constants import WHITE_KING, BLACK_KING, WHITE
 
 class King(Piece):
@@ -8,12 +8,19 @@ class King(Piece):
         self.row = row
         self.col = col
         self.type = WHITE_KING if self.color == WHITE else BLACK_KING
+        self.moved = False
     
     def get_type(self):
         return self.type
 
     def get_position(self):
         return self.row, self.col
+
+    def move(self, row, col):
+        self.row = row
+        self.col = col
+        self.moved = True
+
     
 
     def is_check(self, game):
@@ -26,6 +33,17 @@ class King(Piece):
                 return True
         return False
 
+    def castle(self, game):
+        board = game.board.board
+        valid_moves = []
+        row, col = self.get_position()
+        rook1 = board.board[7][7]
+        rook2 = board.board[7][0]
+
+        if not self.moved:
+            if board.board[row][col + 1] == 0 and board.board[row][col + 2] == 0 and rook1 != 0 and type(rook1) == rook.Rook and not rook1.moved:
+                if self.color == WHITE:
+                    if board.board[row][col + 1] not in board.
     def get_valid_moves(self, board):
         row, col = self.row, self.col
         potential_moves = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
@@ -63,4 +81,13 @@ class King(Piece):
             if potential_moves[i] not in blocked_squares:
                 valid_moves.append(potential_moves[i])
         
+        #castling
+        row, col = self.get_position()
+        rook1 = board.board[7][7]
+        rook2 = board.board[7][0]
+
+        if not self.moved:
+            if board.board[row][col + 1] == 0 and board.board[row][col + 2] == 0 and rook1 != 0 and type(rook1) == rook.Rook and not rook1.moved:
+                if self.color == WHITE:
+                    if board.board[row][col + 1] not in board.
         return valid_moves
