@@ -12,7 +12,7 @@ class Rook(Piece):
     def get_type(self):
         return self.type
 
-    def move(self, row, col):
+    def move(self, row, col, board):
         self.row = row
         self.col = col
         self.moved = True

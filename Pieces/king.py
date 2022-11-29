@@ -9,14 +9,50 @@ class King(Piece):
         self.col = col
         self.type = WHITE_KING if self.color == WHITE else BLACK_KING
         self.moved = False
-    
+        self.white_castled = False
+        self.black_castled = False    
     def get_type(self):
         return self.type
 
     def get_position(self):
         return self.row, self.col
 
-    def move(self, row, col):
+    def move(self, row, col, board):
+        if self.color == WHITE:
+            if col - self.col == 2:
+                #short castle
+                print("reach here")
+                rook1 = board[7][7]
+                rook1.move(7, 5, board)
+                board[7][5] = rook1
+                board[7][7] = 0
+                self.white_castled = True
+            elif self.col - col == 2:
+                #print()
+                #long castle
+                rook2 = board[7][0]
+                rook2.move(7, 3, board)
+                board[7][3] = rook2
+                board[7][0] = 0
+                self.white_castled = True
+        else:
+            if col - self.col == 2:
+                #short castle
+                print("reach here")
+                rook1 = board[0][7]
+                rook1.move(0, 5, board)
+                board[0][5] = rook1
+                board[0][7] = 0
+                self.black_castled = True
+            elif self.col - col == 2:
+                #print()
+                #long castle
+                rook2 = board[0][0]
+                rook2.move(0, 3, board)
+                board[0][3] = rook2
+                board[0][0] = 0
+                self.black_castled = True
+            
         self.row = row
         self.col = col
         self.moved = True
@@ -33,17 +69,37 @@ class King(Piece):
                 return True
         return False
 
-    def castle(self, game):
-        board = game.board.board
+     
+    def castle(self, game):  
+        
+        board = game.board
         valid_moves = []
         row, col = self.get_position()
+        c1 = [(row, col + 1), (row, col + 2)]
+        c2 = [(row, col - 1), (row, col - 2)]
+        c3 = [(0, col + 1), (0, col + 2)]
+        c4 = [(0, col - 1), (0, col - 2)]
+
         rook1 = board.board[7][7]
         rook2 = board.board[7][0]
+        rook3 = board.board[0][7]
+        rook4 = board.board[0][0]
+
 
         if not self.moved:
-            if board.board[row][col + 1] == 0 and board.board[row][col + 2] == 0 and rook1 != 0 and type(rook1) == rook.Rook and not rook1.moved:
-                if self.color == WHITE:
-                    if board.board[row][col + 1] not in board.
+            if self.color == WHITE:
+                if board.board[row][col + 1] == 0 and board.board[row][col + 2] == 0 and all(coordinate not in game.all_black_valid_moves for coordinate in c1) and rook1 != 0 and type(rook1) == rook.Rook and not rook1.moved:
+                    valid_moves.append((7, 6))
+                elif board.board[row][col - 1] == 0 and board.board[row][col - 2] == 0 and board.board[row][col - 3] == 0 and all(coordinate not in game.all_black_valid_moves for coordinate in c2) and rook2 != 0 and type(rook2) == rook.Rook and not rook2.moved:
+                    valid_moves.append((7, 2))
+            else:
+                if board.board[0][col + 1] == 0 and board.board[0][col + 2] == 0 and all(coordinate not in game.all_white_valid_moves for coordinate in c3) and rook3 != 0 and type(rook3) == rook.Rook and not rook3.moved:
+                    valid_moves.append((0, 6))
+                elif board.board[0][col -1] == 0 and board.board[0][col -2] == 0 and board.board[0][col - 3] == 0 and all(coordinate not in game.all_white_valid_moves for coordinate in c4) and rook4 != 0 and type(rook4) == rook.Rook and not rook4.moved:
+                    valid_moves.append((0, 2))
+        
+        return valid_moves
+
     def get_valid_moves(self, board):
         row, col = self.row, self.col
         potential_moves = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
@@ -80,14 +136,6 @@ class King(Piece):
         for i in range(len(potential_moves)):
             if potential_moves[i] not in blocked_squares:
                 valid_moves.append(potential_moves[i])
-        
-        #castling
-        row, col = self.get_position()
-        rook1 = board.board[7][7]
-        rook2 = board.board[7][0]
+    
 
-        if not self.moved:
-            if board.board[row][col + 1] == 0 and board.board[row][col + 2] == 0 and rook1 != 0 and type(rook1) == rook.Rook and not rook1.moved:
-                if self.color == WHITE:
-                    if board.board[row][col + 1] not in board.
         return valid_moves

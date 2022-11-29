@@ -50,13 +50,23 @@ class Game():
                         self.block_from_check_or_capture(piece)
                     
             else:
-                if piece != 0 and piece.color == self.turn:
-                    self.selected = piece
-                    self.valid_moves = piece.get_valid_moves(self.board)
-                    self.check_pin(piece)
+                if piece != 0 and piece.color == self.turn and type(piece) == king.King:
+                    if piece.color == WHITE:
+                        if not piece.white_castled:
+                            self.selected = piece
+                            self.valid_moves = piece.get_valid_moves(self.board) + piece.castle(self)
+                    elif not piece.black_castled:
+                        self.selected = piece
+                        self.valid_moves = piece.get_valid_moves(self.board) + piece.castle(self)
+                        
+                else:
+                    if piece != 0 and piece.color == self.turn:
+                        self.selected = piece
+                        self.valid_moves = piece.get_valid_moves(self.board)
+                        self.check_pin(piece)
     def move(self, row, col, piece):
         old_row, old_col = piece.get_position()
-        self.selected.move(row, col)
+        self.selected.move(row, col, self.board.board)
         piece2 = self.board.board[row][col]
         if piece2 != 0:
             if self.turn == BLACK:
@@ -118,7 +128,7 @@ class Game():
                             squares_between_king_and_attacking_piece.append((min_row + i, min_col + i))
                         else:
                             squares_between_king_and_attacking_piece.append((max_row - i, min_col + i))
-                print(squares_between_king_and_attacking_piece)
+                #print(squares_between_king_and_attacking_piece)
             #checking for the moves in squares_between_king_and_attacking_piece
                 for move in potenial_valid_moves:
                     if move in squares_between_king_and_attacking_piece:
@@ -135,9 +145,9 @@ class Game():
         old_row, old_col = piece.get_position()
         valid_moves = piece.get_valid_moves(self.board)
         self.valid_moves = piece.get_valid_moves(self.board)
-        print(valid_moves)
+        #print(valid_moves)
         for row, col in valid_moves:
-            piece.move(row, col)
+            piece.move(row, col, self.board.board)
             piece2 = self.board.board[row][col]
             if piece2 != 0:
                 if self.turn == BLACK:
@@ -158,7 +168,7 @@ class Game():
             #return piece to original positions
             self.board.board[row][col] = piece2
             self.board.board[old_row][old_col] = piece
-            piece.move(old_row, old_col)
+            piece.move(old_row, old_col, self.board.board)
             if piece2 != 0:
                 if self.turn == BLACK:
                     self.board.white_pieces.append(piece2)

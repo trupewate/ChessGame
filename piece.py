@@ -13,7 +13,7 @@ class Piece():
         self.x = SQUARE_SIZE * self.col + SQUARE_SIZE // 2
         self.y = SQUARE_SIZE * self.row + SQUARE_SIZE // 2
     
-    def move(self, row, col):
+    def move(self, row, col, board):
         self.row = row
         self.col = col
     
