@@ -20,7 +20,8 @@ class Rook(Piece):
     def get_position(self):
         return self.row, self.col
 
-    def get_valid_moves(self, board):
+    def get_valid_moves(self, game):
+        board = game.board
         valid_moves = []
         row, col = self.row, self.col
         

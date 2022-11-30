@@ -100,7 +100,8 @@ class King(Piece):
         
         return valid_moves
 
-    def get_valid_moves(self, board):
+    def get_valid_moves(self, game):
+        board = game.board
         row, col = self.row, self.col
         potential_moves = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
         potential_moves_copy = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
@@ -129,7 +130,7 @@ class King(Piece):
                 else:
                     blocked_squares.extend(((r + 1, c + 1), (r + 1, c - 1)))
             elif type(piece) != King:
-                blocked_squares.extend(piece.get_valid_moves(board))
+                blocked_squares.extend(piece.get_valid_moves(game))
             else:
                 row, col = piece.row, piece.col
         blocked_squares.extend(((row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )))

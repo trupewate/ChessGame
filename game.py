@@ -6,6 +6,7 @@ import copy
 
 class Game():
     def __init__(self):
+        self.previous_move = 0
         self.selected = None
         self.board = Board()
         self.turn = WHITE
@@ -17,13 +18,14 @@ class Game():
         self.is_mate = False
         self.is_stalemate = False
         self.attacking_piece = []
+
     def create_all_valid_moves(self):
         self.all_white_valid_moves.clear()
         self.all_black_valid_moves.clear()
         for piece in self.board.white_pieces:
-            self.all_white_valid_moves.extend(piece.get_valid_moves(self.board))
+            self.all_white_valid_moves.extend(piece.get_valid_moves(self))
         for piece in self.board.black_pieces:
-            self.all_black_valid_moves.extend(piece.get_valid_moves(self.board))
+            self.all_black_valid_moves.extend(piece.get_valid_moves(self))
         #print(self.all_white_valid_moves)
     def select(self, row, col):
         if (self.selected != None) and ((row, col) in self.valid_moves):
@@ -43,7 +45,7 @@ class Game():
                     #only king can move if not mate
                     if type(piece) == king.King:
                         self.selected = piece
-                        self.valid_moves = piece.get_valid_moves(self.board)
+                        self.valid_moves = piece.get_valid_moves(self)
                     #piece can block or capture the checking piece
                     else:
                         self.selected = piece
@@ -54,27 +56,49 @@ class Game():
                     if piece.color == WHITE:
                         if not piece.white_castled:
                             self.selected = piece
-                            self.valid_moves = piece.get_valid_moves(self.board) + piece.castle(self)
+                            self.valid_moves = piece.get_valid_moves(self) + piece.castle(self)
                     elif not piece.black_castled:
                         self.selected = piece
-                        self.valid_moves = piece.get_valid_moves(self.board) + piece.castle(self)
+                        self.valid_moves = piece.get_valid_moves(self) + piece.castle(self)
                         
                 else:
                     if piece != 0 and piece.color == self.turn:
                         self.selected = piece
-                        self.valid_moves = piece.get_valid_moves(self.board)
+                        self.valid_moves = piece.get_valid_moves(self)
                         self.check_pin(piece)
     def move(self, row, col, piece):
         old_row, old_col = piece.get_position()
         self.selected.move(row, col, self.board.board)
         piece2 = self.board.board[row][col]
+        if self.previous_move != 0:
+            piece3, r1, c1, r2, c2 = self.previous_move
+        #check if capture
         if piece2 != 0:
             if self.turn == BLACK:
                 self.board.white_pieces.remove(piece2)
             else:
                 self.board.black_pieces.remove(piece2)
+        #check if capture by un passant
+        if type(piece) == pawn.Pawn:
+            if old_col != col and piece2 == 0:
+                if self.turn == BLACK:
+                    if old_col - col == 1:
+                        self.board.white_pieces.remove(piece3)
+                        self.board.board[old_row][col] = 0
+                    elif old_col - col == - 1:
+                        self.board.white_pieces.remove(piece3)
+                        self.board.board[old_row][col] = 0
+                else:
+                    if old_col - col == 1:
+                        self.board.black_pieces.remove(piece3)
+                        self.board.board[old_row][col] = 0
+                    elif old_col - col == - 1:
+                        self.board.black_pieces.remove(piece3)
+                        self.board.board[old_row][col] = 0
+
         self.board.board[row][col] = piece
         self.board.board[old_row][old_col] = 0 
+        self.previous_move = (piece, old_row, old_col, row, col)
         self.turn = BLACK if piece.color == WHITE else WHITE
         
         #update all valid moves for white pieces
@@ -83,7 +107,7 @@ class Game():
         #print(self.board.white_pieces)
 
     def block_from_check_or_capture(self, piece):
-        potenial_valid_moves = piece.get_valid_moves(self.board)
+        potenial_valid_moves = piece.get_valid_moves(self)
         squares_between_king_and_attacking_piece = []
         self.attacking_piece = []
         #finding position of the King
@@ -94,12 +118,12 @@ class Game():
         #finding the piece attacking king
         if self.turn == WHITE:
             for p in self.board.black_pieces:
-                moves = p.get_valid_moves(self.board)
+                moves = p.get_valid_moves(self)
                 if (king_row, king_col) in moves:
                     self.attacking_piece.append(p)
         else:
             for p in self.board.white_pieces:
-                moves = p.get_valid_moves(self.board)
+                moves = p.get_valid_moves(self)
                 if (king_row, king_col) in moves:
                     self.attacking_piece.append(p)
 
@@ -143,10 +167,11 @@ class Game():
         #check if after each move it is check to the side whose move it was
         #if it is check remove that move from valid moves
         old_row, old_col = piece.get_position()
-        valid_moves = piece.get_valid_moves(self.board)
-        self.valid_moves = piece.get_valid_moves(self.board)
-        #print(valid_moves)
+        valid_moves = piece.get_valid_moves(self)
+        self.valid_moves = piece.get_valid_moves(self)
+        print(valid_moves)
         for row, col in valid_moves:
+    
             piece.move(row, col, self.board.board)
             piece2 = self.board.board[row][col]
             if piece2 != 0:

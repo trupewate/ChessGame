@@ -15,7 +15,8 @@ class Pawn(Piece):
     def get_position(self):
         return self.row, self.col
     
-    def get_valid_moves(self, board):
+    def get_valid_moves(self, game):
+        board = game.board
         valid_moves = []
         row, col = self.row, self.col
         if self.color == WHITE:
@@ -77,4 +78,23 @@ class Pawn(Piece):
             if right_piece != 0:
                 if right_piece.color != self.color:
                     valid_moves.append((row + 1, col + 1))
+        
+
+        #un passant
+        if game.previous_move != 0:
+            piece, old_row, old_col, row, col = game.previous_move
+            if type(piece) == Pawn:
+                if self.color == WHITE:
+                    if row - old_row == 2 and self.row == row:
+                        if (self.col - col == 1):
+                            valid_moves.append((self.row - 1, self.col - 1))
+                        elif self.col - col == -1:
+                            valid_moves.append((self.row - 1, self.col + 1))
+                elif self.color == BLACK:
+                    if old_row - row == 2 and self.row == row:
+                        if self.col - col == 1:
+                            valid_moves.append((self.row + 1, self.col - 1))
+                        elif self.col - col == - 1:
+                            valid_moves.append((self.row + 1, self.col + 1))
+
         return valid_moves

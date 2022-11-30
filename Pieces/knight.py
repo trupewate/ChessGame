@@ -14,7 +14,8 @@ class Knight(Piece):
     def get_position(self):
         return self.row, self.col
     
-    def get_valid_moves(self, board):
+    def get_valid_moves(self, game):
+        board = game.board
         row, col = self.row, self.col
         #move1
         valid_moves = []
