@@ -21,14 +21,12 @@ class King(Piece):
         if self.color == WHITE:
             if col - self.col == 2:
                 #short castle
-                print("reach here")
                 rook1 = board[7][7]
                 rook1.move(7, 5, board)
                 board[7][5] = rook1
                 board[7][7] = 0
                 self.white_castled = True
             elif self.col - col == 2:
-                #print()
                 #long castle
                 rook2 = board[7][0]
                 rook2.move(7, 3, board)
@@ -38,7 +36,6 @@ class King(Piece):
         else:
             if col - self.col == 2:
                 #short castle
-                print("reach here")
                 rook1 = board[0][7]
                 rook1.move(0, 5, board)
                 board[0][5] = rook1
@@ -55,13 +52,11 @@ class King(Piece):
             
         self.row = row
         self.col = col
-        self.moved = True
 
     
 
     def is_check(self, game):
         if self.color == WHITE:
-            print()
             if (self.row, self.col) in game.all_black_valid_moves:
                 return True
         else:
@@ -101,10 +96,12 @@ class King(Piece):
         return valid_moves
 
     def get_valid_moves(self, game):
+        # i need to delete the moves which are blocked by other
+        
         board = game.board
         row, col = self.row, self.col
-        potential_moves = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
-        potential_moves_copy = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )]
+        potential_moves = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col)]
+        potential_moves_copy = [(row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col)]
         #checking for nearby own pieces:
 
         for i in range(len(potential_moves_copy)):
@@ -129,11 +126,13 @@ class King(Piece):
                     blocked_squares.extend(((r - 1, c - 1), (r - 1, c + 1)))
                 else:
                     blocked_squares.extend(((r + 1, c + 1), (r + 1, c - 1)))
-            elif type(piece) != King:
-                blocked_squares.extend(piece.get_valid_moves(game))
-            else:
+            elif type(piece) == King:
                 row, col = piece.row, piece.col
-        blocked_squares.extend(((row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )))
+                blocked_squares.extend(((row, col + 1), (row, col - 1), (row + 1, col + 1), (row + 1, col - 1), (row + 1, col), (row -1, col + 1), (row -1, col - 1), (row -1, col )))
+            else:
+                blocked_squares.extend(piece.get_valid_moves(game))
+            
+        
         for i in range(len(potential_moves)):
             if potential_moves[i] not in blocked_squares:
                 valid_moves.append(potential_moves[i])

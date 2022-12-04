@@ -6,7 +6,9 @@ from board import Board
 from game import Game
 from Pieces.pawn import Pawn
 
+pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
+font = pygame.font.SysFont(None, FONT_SIZE)
 pygame.display.set_caption("ChessLife")
 clock = pygame.time.Clock()
 
@@ -23,6 +25,8 @@ def game_loop():
         draw_board()
         draw_pieces()
         draw_valid_moves_circles()
+        if game.is_mate or game.is_stalemate:
+            result(game.winner)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -33,6 +37,17 @@ def game_loop():
         pygame.display.flip()
     pygame.quit()
 
+def result(res):
+    if res == WHITE:
+        winner = "White"
+    elif res == BLACK:
+        winner = "Black"
+    else:
+        winner = "Draw"
+    text = f'{winner} wins' if winner != "Draw" else winner
+    n_text = font.render(text, True, GREEN)
+    window.blit(n_text, (WIDTH // 2 - n_text.get_width() // 2, HEIGHT // 2 - n_text.get_height()//2))
+    
 def calculate_pos(row, col):
     x = SQUARE_SIZE * col + SQUARE_SIZE // 2
     y = SQUARE_SIZE * row + SQUARE_SIZE // 2

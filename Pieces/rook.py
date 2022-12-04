@@ -15,7 +15,6 @@ class Rook(Piece):
     def move(self, row, col, board):
         self.row = row
         self.col = col
-        self.moved = True
 
     def get_position(self):
         return self.row, self.col
